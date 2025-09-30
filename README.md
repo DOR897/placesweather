@@ -1,126 +1,157 @@
-# Getting Started with Create React App
+Weather-on-Wheels
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Small React app that lets you create places, view them on a Leaflet map, and fetch current weather (OpenWeather) for a selected place. Addresses are geocoded to lat/lon using OpenStreetMap Nominatim.
 
-## Available Scripts
+Tech
 
-In the project directory, you can run:
+React 18 (CRA), React Router 6
 
-### `npm start`
+Redux Toolkit + React-Redux
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Leaflet + react-leaflet (with icon fix)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Axios
 
-### `npm test`
+OpenWeather “Current weather data” API
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Nominatim (OpenStreetMap) for free geocoding
 
-### `npm run build`
+Project structure
+weather-on-wheels/
+├─ public/
+│  └─ index.html
+├─ src/
+│  ├─ App.jsx
+│  ├─ App.css
+│  ├─ index.js
+│  ├─ index.css
+│  ├─ fixLeafletIcon.js              # fixes missing default marker icons
+│  ├─ components/
+│  │  ├─ PlaceCard.jsx
+│  │  ├─ WeatherPanel.jsx
+│  │  └─ weather-panel.css
+│  ├─ pages/
+│  │  ├─ CreatePlace.jsx             # form (name/type/address) + geocoding
+│  │  └─ PlacesMap.jsx               # list + map + weather panel
+│  ├─ slices/
+│  │  ├─ placesSlice.js              # { places: [...] }
+│  │  └─ weatherSlice.js             # async fetchWeather({lat,lon})
+│  └─ store/
+│     └─ store.js                    # RTK store (places, weather)
+├─ .env                              # REACT_APP_API_KEY=...
+├─ .gitignore
+├─ package.json
+└─ README.md
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Prerequisites
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Node 18+ and npm
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+OpenWeather API key (free): https://openweathermap.org/api
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-📘 README.md
-# Weather on Wheels
-
-React + Redux app that lets you add places, see them on a Leaflet map, and fetch current weather for each selected place using OpenWeather.
-
-## Features
-- Add places with **name / type / address**
-- Address **geocoding** (OpenStreetMap Nominatim) → lat/lon
-- Leaflet map with markers for all places
-- Click a place/marker → fetch **current weather** (OpenWeather)
-- Loading & error handling, nice panel with icon + stats
-
-## Getting Started
-
-```bash
-npm install
-
-
-Create .env (project root):
+Create a .env file in the project root:
 
 REACT_APP_API_KEY=YOUR_OPENWEATHER_KEY
 
 
-Run:
+After changing .env, stop and re-run the dev server.
 
+Install & run
+npm install
 npm start
+
+
+Dev server: http://localhost:3000
+
+Production build: npm run build
+
+How it works
+
+Create Place
+
+Go to Add Place, fill Name (≤25), Type (Hotel/Restaurant/Park), Address.
+
+On submit we call Nominatim to geocode the address → lat, lng.
+
+The place is added to the Redux places slice.
+
+Map & List
+
+On Map you’ll see a list of places and a Leaflet map with markers.
+
+Click a list item or a marker to select a place.
+
+Weather Panel
+
+Selecting a place dispatches fetchWeather({ lat, lon }) (OpenWeather).
+
+While fetching → “Loading weather…”.
+
+On success shows temp/feels/pressure/humidity/wind + icon.
+
+On error (e.g., quota/invalid key) shows an error message.
+
+Important files
+
+src/fixLeafletIcon.js
+Leaflet’s default marker images won’t load in bundlers unless you map them.
+This file wires the icon URLs. Ensure it’s imported once (e.g., in PlacesMap.jsx):
+
+import "../fixLeafletIcon";
+
+
+src/slices/weatherSlice.js
+Uses RTK createAsyncThunk:
+
+export const fetchWeather = createAsyncThunk(
+  "weather/fetchWeather",
+  async ({ lat, lon }) => {
+    const { data } = await axios.get(
+      "https://api.openweathermap.org/data/2.5/weather",
+      { params: { lat, lon, units: "metric", appid: process.env.REACT_APP_API_KEY } }
+    );
+    return data;
+  }
+);
+
+UX notes (matching the assignment)
+
+Creation page validates name length and requires type & address.
+
+Loading state on create (while geocoding) and on weather fetch.
+
+Map page shows all places, clicking a place centers/opens details and fetches weather.
+
+Filtering by type (optional stretch) can be added via a simple select that filters places before rendering.
+
+Troubleshooting
+
+“Module not found: leaflet images / css”
+Make sure leaflet is installed and import "leaflet/dist/leaflet.css"; exists (in index.js). Also keep fixLeafletIcon.js imported once.
+
+Hooks error: “function is not a React component”
+Component names must start with an uppercase letter: CreatePlace, PlacesMap.
+
+Weather not updating
+Verify .env has REACT_APP_API_KEY and you restarted npm start. Check browser console for API errors.
+
+Nominatim returns no results
+Try a more precise address (city, street, number, country). API is rate-limited—avoid rapid submits.
 
 Scripts
+npm start        # dev
+npm run build    # production build
 
-npm start – Dev server
+Future improvements (nice to have)
 
-npm run build – Production build
+Type filter on the map list
 
-Tech
+Forecast chart (5-day / 3-hour data) with Chart.js
 
-React 18, React Router 6
+Persist places to localStorage or a backend
 
-Redux Toolkit, React-Redux
+Unit tests for slices and components
 
-Leaflet + react-leaflet
+License
 
-Axios
-
-
----
-
-## 🚀 איך להריץ
-1) שים את כל הקבצים כמו כאן בתיקייה `Weather-on-wheels`.  
-2) התקן תלויות:
-```bash
-npm install
-
-
-צור .env עם המפתח שלך (ראו למעלה), ואז:
-
-npm start
+MIT (or your choice)
