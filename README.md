@@ -21,7 +21,7 @@ Built with **React 19, Redux Toolkit, React-Leaflet, Axios**, and styled with **
 
 - 📍 **Add Places** (Hotels, Restaurants, Parks, etc.) with geocoded coordinates  
 - 🗺️ **Interactive Map** powered by **React-Leaflet**  
-- 🌦️ **Weather Panel** with real-time weather + 5-day forecast from **OpenWeather**  
+- 🌦️ **Weather Panel** with real-time weather from **OpenWeather**  
 - 🔄 **Redux Toolkit** for global state management  
 - 🎨 **Responsive UI** styled with **CSS Grid & Flexbox**  
 - ⚡ Fast development with **Vite**  
