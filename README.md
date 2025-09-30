@@ -1,157 +1,142 @@
-Weather-on-Wheels
+# 🌦️ Weather on Wheels
 
-Small React app that lets you create places, view them on a Leaflet map, and fetch current weather (OpenWeather) for a selected place. Addresses are geocoded to lat/lon using OpenStreetMap Nominatim.
+![Weather on Wheels](https://img.shields.io/badge/React-19-blue?style=flat-square&logo=react) 
+![Redux Toolkit](https://img.shields.io/badge/Redux_Toolkit-%23764ABC.svg?style=flat-square&logo=redux&logoColor=white)
+![Leaflet](https://img.shields.io/badge/Leaflet-Map-green?style=flat-square&logo=leaflet)
 
-Tech
+A React + Redux web application that lets you **create places on a map**, view them, and get **real-time weather data** for each location using the **OpenWeather API**.  
+Built with **React 19, Redux Toolkit, React-Leaflet, Axios**, and styled with **CSS Flex/Grid**.
 
-React 18 (CRA), React Router 6
+---
 
-Redux Toolkit + React-Redux
+## 📸 Demo
 
-Leaflet + react-leaflet (with icon fix)
+👉 [Demo Video on YouTube](https://your-demo-link-here.com) *(replace with your uploaded link)*  
 
-Axios
+![App Screenshot](https://via.placeholder.com/900x400?text=Weather+on+Wheels+Demo)  
 
-OpenWeather “Current weather data” API
+---
 
-Nominatim (OpenStreetMap) for free geocoding
+## 🚀 Features
 
-Project structure
-weather-on-wheels/
-├─ public/
-│  └─ index.html
-├─ src/
-│  ├─ App.jsx
-│  ├─ App.css
-│  ├─ index.js
-│  ├─ index.css
-│  ├─ fixLeafletIcon.js              # fixes missing default marker icons
-│  ├─ components/
-│  │  ├─ PlaceCard.jsx
-│  │  ├─ WeatherPanel.jsx
-│  │  └─ weather-panel.css
-│  ├─ pages/
-│  │  ├─ CreatePlace.jsx             # form (name/type/address) + geocoding
-│  │  └─ PlacesMap.jsx               # list + map + weather panel
-│  ├─ slices/
-│  │  ├─ placesSlice.js              # { places: [...] }
-│  │  └─ weatherSlice.js             # async fetchWeather({lat,lon})
-│  └─ store/
-│     └─ store.js                    # RTK store (places, weather)
-├─ .env                              # REACT_APP_API_KEY=...
-├─ .gitignore
-├─ package.json
-└─ README.md
+- 📍 **Add Places** (Hotels, Restaurants, Parks, etc.) with geocoded coordinates  
+- 🗺️ **Interactive Map** powered by **React-Leaflet**  
+- 🌦️ **Weather Panel** with real-time weather + 5-day forecast from **OpenWeather**  
+- 🔄 **Redux Toolkit** for global state management  
+- 🎨 **Responsive UI** styled with **CSS Grid & Flexbox**  
+- ⚡ Fast development with **Vite**  
 
-Prerequisites
+---
 
-Node 18+ and npm
+## 🏗️ Workflow Diagram
 
-OpenWeather API key (free): https://openweathermap.org/api
+```mermaid
+flowchart TD
+    A[User Creates Place] --> B[Redux: placesSlice]
+    B --> C[Leaflet Map Updates]
+    C --> D[Click Place]
+    D --> E[Dispatch fetchWeather]
+    E --> F[Redux: weatherSlice]
+    F --> G[Weather Panel Updates]
+
+📂 Directory Structure 
+placesweather/
+│── public/                # Static files
+│── src/
+│   ├── components/         # Reusable UI components
+│   │   ├── PlaceCard.jsx
+│   │   ├── weatherPanel.css
+│   │   └── WeatherPanel.jsx
+│   │
+│   ├── pages/              # Main pages
+│   │   ├── CreatePlace.jsx
+│   │   └── PlacesMap.jsx
+│   │
+│   ├── slices/             # Redux Toolkit slices
+│   │   ├── placesSlice.js
+│   │   └── weatherSlice.js
+│   │
+│   ├── store/              # Redux store
+│   │   └── store.js
+│   │
+│   ├── fixLeafletIcon.js   # Fix for Leaflet marker icons
+│   ├── App.jsx             # App entry
+│   ├── index.js            # Main React entry
+│   └── index.css           # Global styles
+│
+├── .env                    # API keys (OpenWeather)
+├── package.json
+└── README.md
+
+⚙️ Prerequisites
+
+Node.js (v18+ recommended)
+
+NPM or Yarn
+
+OpenWeather API Key → Get Free Key
+
+
+🛠️ Setup & Installation
+
+Clone the repo
+
+git clone https://github.com/YOUR_USERNAME/placesweather.git
+cd placesweather
+
+
+Install dependencies
+
+npm install
+
+
+Set up environment variables
 
 Create a .env file in the project root:
 
-REACT_APP_API_KEY=YOUR_OPENWEATHER_KEY
+REACT_APP_API_KEY=your_openweather_api_key
 
 
-After changing .env, stop and re-run the dev server.
+Run the app
 
-Install & run
-npm install
-npm start
+npm run dev
 
 
-Dev server: http://localhost:3000
+Your app will be running at 👉 http://localhost:3000
 
-Production build: npm run build
+✅ Usage
 
-How it works
+Open the app in your browser.
 
-Create Place
+Use the "Create Place" form to add new places.
 
-Go to Add Place, fill Name (≤25), Type (Hotel/Restaurant/Park), Address.
+Click a place on the map or list to see its weather details.
 
-On submit we call Nominatim to geocode the address → lat, lng.
+Explore multiple locations and compare their weather!
 
-The place is added to the Redux places slice.
+🌐 Tech Stack
 
-Map & List
+Frontend: React 19, React Router, React-Leaflet
 
-On Map you’ll see a list of places and a Leaflet map with markers.
+State Management: Redux Toolkit
 
-Click a list item or a marker to select a place.
+API Calls: Axios
 
-Weather Panel
+Weather API: OpenWeather
 
-Selecting a place dispatches fetchWeather({ lat, lon }) (OpenWeather).
+Styling: CSS (Flexbox, Grid, Bootstrap optional)
 
-While fetching → “Loading weather…”.
+🚧 Future Improvements
 
-On success shows temp/feels/pressure/humidity/wind + icon.
+🔑 Add Google & Facebook OAuth Login
 
-On error (e.g., quota/invalid key) shows an error message.
+📊 Display more weather metrics (UV index, air quality)
 
-Important files
+🗂️ Save places persistently in a backend (FastAPI / Firebase)
 
-src/fixLeafletIcon.js
-Leaflet’s default marker images won’t load in bundlers unless you map them.
-This file wires the icon URLs. Ensure it’s imported once (e.g., in PlacesMap.jsx):
+🛠️ Dockerize project for deployment
 
-import "../fixLeafletIcon";
+👨‍💻 Author
 
-
-src/slices/weatherSlice.js
-Uses RTK createAsyncThunk:
-
-export const fetchWeather = createAsyncThunk(
-  "weather/fetchWeather",
-  async ({ lat, lon }) => {
-    const { data } = await axios.get(
-      "https://api.openweathermap.org/data/2.5/weather",
-      { params: { lat, lon, units: "metric", appid: process.env.REACT_APP_API_KEY } }
-    );
-    return data;
-  }
-);
-
-UX notes (matching the assignment)
-
-Creation page validates name length and requires type & address.
-
-Loading state on create (while geocoding) and on weather fetch.
-
-Map page shows all places, clicking a place centers/opens details and fetches weather.
-
-Filtering by type (optional stretch) can be added via a simple select that filters places before rendering.
-
-Troubleshooting
-
-“Module not found: leaflet images / css”
-Make sure leaflet is installed and import "leaflet/dist/leaflet.css"; exists (in index.js). Also keep fixLeafletIcon.js imported once.
-
-Hooks error: “function is not a React component”
-Component names must start with an uppercase letter: CreatePlace, PlacesMap.
-
-Weather not updating
-Verify .env has REACT_APP_API_KEY and you restarted npm start. Check browser console for API errors.
-
-Nominatim returns no results
-Try a more precise address (city, street, number, country). API is rate-limited—avoid rapid submits.
-
-Scripts
-npm start        # dev
-npm run build    # production build
-
-Future improvements (nice to have)
-
-Type filter on the map list
-
-Forecast chart (5-day / 3-hour data) with Chart.js
-
-Persist places to localStorage or a backend
-
-Unit tests for slices and components
-
-License
-
-MIT (or your choice)
+Dor X
+🔗 GitHub
