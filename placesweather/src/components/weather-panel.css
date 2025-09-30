@@ -1,0 +1,32 @@
+
+.weather-panel {
+  margin-top: 12px;
+  background: #f6f7fb;
+  border: 1px solid #e5e8f0;
+  border-radius: 8px;
+  padding: 12px;
+}
+.weather-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.weather-icon { width: 48px; height: 48px; }
+.weather-grid {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 6px;
+}
+.weather-item {
+  background: #fff;
+  border: 1px solid #e6e9ef;
+  border-radius: 8px;
+  padding: 8px;
+  text-align: center;
+}
+.weather-item h4 { margin: 0 0 4px; font-weight: normal; }
+.weather-item .value {
+  font-size: 1.2em;
+  font-weight: bold;
+}
